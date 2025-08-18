@@ -161,7 +161,7 @@ function App() {
     setIndex(0);
     setLoadingForecast(true);
     try{
-      const request = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${weatherAPIkey}&q=${lat.current}, ${lng.current}&days=5&aqi=no&alerts=no`);
+      const request = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${weatherAPIkey}&q=${lat.current}, ${lng.current}&days=5&aqi=no&alerts=no`);
       const data = await request.json();
       setWeatherForecast(data);
       setFetchSuccess(true);
@@ -237,7 +237,7 @@ function App() {
   //REFETCH FORECAST FUNCTION
   async function refetchForecast(){
     try{
-      const fetchRequest = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${weatherAPIkey}&q=${lat.current}, ${lng.current}&days=5&aqi=no&alerts=no`);
+      const fetchRequest = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${weatherAPIkey}&q=${lat.current}, ${lng.current}&days=5&aqi=no&alerts=no`);
       const data = await fetchRequest.json();
       setWeatherForecast(data);
     }catch(err){
