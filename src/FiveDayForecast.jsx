@@ -17,11 +17,7 @@ export default function FiveDaysForecast(props){
 
 
 function DesktopFiveDayForecast(props){
-    const hourlyDiv1 = React.useRef(null);
-    const hourlyDiv2 = React.useRef(null);
-    const hourlyDiv3 = React.useRef(null);
     const currentIndexRef = props.props.currentIndexDivRef;
-    const arr = [hourlyDiv1, hourlyDiv2, hourlyDiv3];
     const {width} = useWindowSize();
     const isCelsius = props.props.isCelsius;
     const todayCurrentHour = React.useRef(null);
@@ -75,10 +71,6 @@ function DesktopFiveDayForecast(props){
                     )
                 }
         })
-
-        
-        //const ref= React.useRef(null);
-        // const currentIndexRef = props.props.currentIndexDivRef;
         
         return(
             <div className="day-hourly-div" 
@@ -136,12 +128,6 @@ function DesktopFiveDayForecast(props){
             }
         }
     }, [props.props.index  === 0]);
-
-    // React.useEffect(() => {
-    //     console.log(arr[props.props.index].current);
-    //     arr[props.props.index].current.scrollRight = 0;
-    //     arr[props.props.index].current.scrollTo({left: 0, behavior: 'smooth'});
-    // }, [props.props.index != 0])
 
     return(
         <section id="five-day-forecast">

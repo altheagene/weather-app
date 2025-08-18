@@ -44,6 +44,7 @@ function App() {
       console.log(currentHour);
   }
 
+  //Requests to get the location of the device. location would be used to display default forecast
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -77,6 +78,7 @@ function App() {
 
   // }, 5000);
 
+  //Refetches updated forecast every 30 seconds
   React.useEffect(() => {
       setInterval(() => {
         refetchForecast();
@@ -85,10 +87,7 @@ function App() {
 
   //SearchBar Functions
   async function onSearch(){
-
     const place = searchBarRef.current.value;
-
-
     try{
       const request = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${place}&key=${geocodeKey}&language=en&pretty=1`);
       const data = await request.json();
@@ -105,17 +104,29 @@ function App() {
 
   //USE EFFECTS
 
+  //When user clicks on another day
   React.useEffect(() => {
     console.log(currentIndexDivRef.current)
+    console.log(index);
     if(currentIndexDivRef.current){
-      currentIndexDivRef.current.scrollLeft = 500;
-      currentIndexDivRef.current.scrollTo({left: 0, behavior: 'smooth'})
-    }
-  }, [index > 0])
+      currentIndexDivRef.current.scrollLeft = 
+      currentIndexDivRef.current.scrollWidth - currentIndexDivRef.current.offsetWidth; //default scrollleft is to the max
+      console.log(currentIndexDivRef.current.scrollLeft);
 
+      setTimeout(() => {
+        currentIndexDivRef.current.scrollTo({left: 0, behavior: 'smooth'}) //scrolls to the very left
+
+      }, 200)
+    }
+  }, [index])
+
+
+  //If search input is not empty
   React.useEffect(() => {
     if(searchInput != ''){
-      setSearching(true);
+      setSearching(true); //if true, 'Searching Locations' would be shown on search div
+
+      //this is a debounce method
       const timeout = setTimeout(() => {
         onSearch(searchInput);
       }, 1000);
@@ -129,6 +140,7 @@ function App() {
     }
   }, [searchInput]);
 
+  //Adjusts the hourly-forecast-divs edges depending on the index
   React.useEffect(() => {
    if(hourlyForecastContainer.current){
      if(index === 0){
@@ -142,6 +154,7 @@ function App() {
   }, [index])
 
 
+  //WHEN USER CHOOSES A LOCATION 
   async function chooseLocation(lati, long){
     lat.current = lati;
     lng.current = long;
@@ -164,6 +177,7 @@ function App() {
   
   //FUNCTIONS
   function chooseForecast(index){
+    console.log(index);
     setIndex(index);
     const offsetWidth = hourlyForecastContainer.current.offsetWidth;
     hourlyForecastContainer.current.scrollTo({
@@ -172,6 +186,7 @@ function App() {
     })
   }
 
+  //EXTRACTS THE HOUR TO BE USED IN HOURLY FORECASTS
   function getHour(hour){
     const time = hour.time.split(" ");
     const militaryHour = time[1].split(":")[0]; //get the hour part in the time (e.g 4:30...take the number 4)
@@ -193,6 +208,8 @@ function App() {
     setIsCelsius(true);
   }
 
+
+  //BUTTON FUNCTIONS FOR HOURLY FORECASTS
   function clickNextBtn(elementRef){
     const offsetWidth = elementRef.current.offsetWidth;
 
@@ -217,6 +234,7 @@ function App() {
          behavior: 'smooth'});
   }
 
+  //REFETCH FORECAST FUNCTION
   async function refetchForecast(){
     try{
       const fetchRequest = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${weatherAPIkey}&q=${lat.current}, ${lng.current}&days=5&aqi=no&alerts=no`);
