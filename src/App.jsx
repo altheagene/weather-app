@@ -6,6 +6,7 @@ import FiveDayForecast from './FiveDayForecast';
 import React from 'react'
 import { useWindowSize } from 'react-use';
 import SkeletonCards from './SkeletonMain';
+import Navbar from './Navbar';
 import SkeletonFiveDayForecast from './SkeletonFiveDayForecast';
 
 function App() {
@@ -251,7 +252,7 @@ function App() {
         {fetchSuccess ? null : <div id='error-msg-div'>
           <p>There was an error in fetching your weather forecast request.</p>
         </div>}
-        <Navbar />
+        <Navbar>
         <SearchBar ref={searchBarRef} onClick={onSearch} 
                    searchSuggestions={searchSuggestions} 
                    handleClick={chooseLocation} 
@@ -261,6 +262,7 @@ function App() {
                   celsiusBtnClick={celsiusBtnClick}
                   farenheitBtnClick={farenheitBtnClick}
                   isCelsius={isCelsius}/>
+        </Navbar>
         {/* <MainForecast weatherForecast={weatherForecast} 
                       loadingForecast={loadingForecast}/>
         <SkeletonCards /> */}
