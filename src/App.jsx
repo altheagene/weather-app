@@ -252,7 +252,7 @@ function App() {
         {fetchSuccess ? null : <div id='error-msg-div'>
           <p>There was an error in fetching your weather forecast request.</p>
         </div>}
-        <Navbar>
+        <Navbar />
         <SearchBar ref={searchBarRef} onClick={onSearch} 
                    searchSuggestions={searchSuggestions} 
                    handleClick={chooseLocation} 
@@ -262,7 +262,6 @@ function App() {
                   celsiusBtnClick={celsiusBtnClick}
                   farenheitBtnClick={farenheitBtnClick}
                   isCelsius={isCelsius}/>
-        </Navbar>
         {/* <MainForecast weatherForecast={weatherForecast} 
                       loadingForecast={loadingForecast}/>
         <SkeletonCards /> */}
