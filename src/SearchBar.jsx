@@ -15,7 +15,7 @@ export default function SearchBar(props){
         <section id="search-bar-section">
             <div>
                 <input type="text" ref={props.ref} placeholder="Search a city" onChange={props.handleChange}></input>
-                <div id="temp-format-btns">
+                {/* <div id="temp-format-btns">
                     <button onClick={props.farenheitBtnClick}
                             style={{
                                 backgroundColor: isCelsius ? 'transparent' : 'rgba(255, 255, 255, 0.42)',
@@ -26,7 +26,7 @@ export default function SearchBar(props){
                                 backgroundColor: isCelsius ?  'rgba(255, 255, 255, 0.42)' : 'transparent',
                                 color: isCelsius ? 'white' : 'gray'
                             }}>C</button>
-                </div>
+                </div> */}
             </div>
             {props.ref.current === document.activeElement ? <div id="suggestions-div" style={{visibility: searchInput.length > 0 ? 'visible' : 'hidden'}}>
                 <ul>

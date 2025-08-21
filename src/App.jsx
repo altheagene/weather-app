@@ -246,14 +246,28 @@ function App() {
     }
   }
 
+  const searchBarAtt = {
+    ref: searchBarRef,
+    onClick: onSearch,
+    searchSuggestions: searchSuggestions,
+    handleClick: chooseLocation,
+    handleChange: handleChange,
+    searching: searching,
+    searchInput: searchInput,
+    celsiusBtnClick: celsiusBtnClick,
+    farenheitBtnClick: farenheitBtnClick,
+    isCelsius: isCelsius
+  }
+
   return (
     <>
       <section id='full-app-section'>
+         <Navbar search={searchBarAtt}/>
+        <section id='body-section'>
         {fetchSuccess ? null : <div id='error-msg-div'>
           <p>There was an error in fetching your weather forecast request.</p>
         </div>}
-        <Navbar />
-        <SearchBar ref={searchBarRef} onClick={onSearch} 
+        {/* <SearchBar ref={searchBarRef} onClick={onSearch} 
                    searchSuggestions={searchSuggestions} 
                    handleClick={chooseLocation} 
                    handleChange={handleChange} 
@@ -261,7 +275,7 @@ function App() {
                   searchInput={searchInput}
                   celsiusBtnClick={celsiusBtnClick}
                   farenheitBtnClick={farenheitBtnClick}
-                  isCelsius={isCelsius}/>
+                  isCelsius={isCelsius}/> */}
         {/* <MainForecast weatherForecast={weatherForecast} 
                       loadingForecast={loadingForecast}/>
         <SkeletonCards /> */}
@@ -289,6 +303,7 @@ function App() {
                         clickPrevBtn={clickPrevBtn}
                         currentIndexDivRef={currentIndexDivRef}
                           /> }
+        </section>
       </section>
     </>
   )
