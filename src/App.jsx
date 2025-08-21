@@ -21,6 +21,15 @@ function App() {
   const [fetchSuccess, setFetchSuccess] = React.useState(true);
   const [isCelsius, setIsCelsius] = React.useState(true);
 
+ React.useEffect(() => {
+   localStorage.clear();
+ }, [])
+  const getData = localStorage.getItem('data');
+  let history = JSON.parse(getData) || [];
+  
+
+
+
   
   // API KEYS
   const geocodeKey = 'b0999bd292c0481780cddfd09d8fc6ee';
@@ -35,7 +44,8 @@ function App() {
   const currentIndexDivRef = React.useRef(null);
 
   //VARIABLES
-
+  const currentHisto = localStorage.getItem('data');
+  const parsedCurrentHisto = JSON.parse(currentHisto);
   if(Object.keys(weatherForecast).length > 0){
     console.log(weatherForecast)
       const date = weatherForecast.location.localtime.split(' ');
@@ -45,21 +55,7 @@ function App() {
       console.log(currentHour);
   }
 
-  //Requests to get the location of the device. location would be used to display default forecast
-  React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lati = position.coords.latitude;
-        const long = position.coords.longitude;
-        chooseLocation(lati, long);
-        lat.current = lati;
-        lng.current = long;
-      },
-      (error) => {
-        console.log(error);
-      });
 
-  }, [])
 
   // React.useEffect(() => {
   //   const date = weatherForecast.location.localtime.split(' ');
@@ -79,12 +75,6 @@ function App() {
 
   // }, 5000);
 
-  //Refetches updated forecast every 30 seconds
-  React.useEffect(() => {
-      setInterval(() => {
-        refetchForecast();
-      }, 30000);
-  }, [])
 
   //SearchBar Functions
   async function onSearch(){
@@ -104,6 +94,43 @@ function App() {
   }
 
   //USE EFFECTS
+
+    //Requests to get the location of the device. location would be used to display default forecast
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lati = position.coords.latitude;
+        const long = position.coords.longitude;
+        chooseLocation(lati, long);
+        lat.current = lati;
+        lng.current = long;
+      },
+      (error) => {
+        console.log(error);
+      });
+
+  }, [])
+
+  React.useEffect(() => {
+    if(Object.keys(weatherForecast).length != 0){
+      const lat = weatherForecast.location.lat;
+      const long = weatherForecast.location.lon;
+
+      //code to check if current location is already saved in local storage
+      const exists = history.some( entry => entry.lat === lat && entry.lon === long); 
+      if(!exists){
+        history.push(weatherForecast.location);
+        localStorage.setItem('data', JSON.stringify(history))
+      }
+    }
+  }, [weatherForecast])
+
+    //Refetches updated forecast every 30 seconds
+  React.useEffect(() => {
+      setInterval(() => {
+        refetchForecast();
+      }, 30000);
+  }, [])
 
   //When user clicks on another day
   React.useEffect(() => {
