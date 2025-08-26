@@ -21,6 +21,7 @@ function App() {
   const [loadingForecast, setLoadingForecast] = React.useState(false);
   const [fetchSuccess, setFetchSuccess] = React.useState(true);
   const [isCelsius, setIsCelsius] = React.useState(true);
+  const [kebabMenuIndex, setKebabMenuIndex] = React.useState(-1);
 
  //localStorage.clear();
   const getData = localStorage.getItem('data');
@@ -309,10 +310,19 @@ function App() {
     isCelsius: isCelsius
   }
 
+  function onKebabClick(index){
+    setKebabMenuIndex(index);
+  }
+
   return (
     <>
       <section id='full-app-section'>
-         <Navbar search={searchBarAtt} history={history} chooseRecentFunc={chooseFromRecentSearch} isCelsius={isCelsius}/>
+         <Navbar search={searchBarAtt} 
+                  history={history} 
+                  chooseRecentFunc={chooseFromRecentSearch} 
+                  isCelsius={isCelsius}
+                  kebabMenuIndex={kebabMenuIndex}
+                  onKebabClick={onKebabClick}/>
         <section id='body-section'>
           { fetchSuccess ?  <div>
                   

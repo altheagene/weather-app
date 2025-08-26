@@ -698,3 +698,8 @@ nav{
     font-weight: 400;
 }
 
+/* KEBAB DROP */
+
+.kebab-drop-menu{
+    display: block;
+}

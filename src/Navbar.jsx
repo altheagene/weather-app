@@ -11,12 +11,13 @@ export default function Navbar(props){
     const rightBtnRef = React.useRef(null);
     const recentSearchesRef = React.useRef(null);
     const recentSearchBtnsRef = React.useRef(null)
-
+    const kebabMenuIndex = props.kebabMenuIndex;
 
     const histoButtons = history.map((histo, index) => {
         const region = histo.region != '' ? histo.region : histo.country;
         const lat = histo.lat;
         const lon = histo.lon;
+
         return(
             <div className="recent-search-buttons-divs"
                  style={{
@@ -36,7 +37,15 @@ export default function Navbar(props){
                         <img src={histo.icon}></img>
                     </div>
                 </button>
-                <button id="recent-search-three-dots"><span className="bi bi-three-dots-vertical"></span></button>
+                <button id="recent-search-three-dots"
+                        onClick={() => props.onKebabClick(index)}>
+                    <span className="bi bi-three-dots-vertical"></span>
+                </button>
+                {kebabMenuIndex === index ?
+                <ul className="kebab-drop-menu">
+                    <button>Remove item</button>
+                </ul> : null}
+
             </div>
         )
     })
