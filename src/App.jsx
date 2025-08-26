@@ -8,6 +8,7 @@ import { useWindowSize } from 'react-use';
 import SkeletonCards from './SkeletonMain';
 import Navbar from './Navbar';
 import SkeletonFiveDayForecast from './SkeletonFiveDayForecast';
+import ErrorWindow from './ErrorWindow';
 
 function App() {
 
@@ -21,12 +22,9 @@ function App() {
   const [fetchSuccess, setFetchSuccess] = React.useState(true);
   const [isCelsius, setIsCelsius] = React.useState(true);
 
- React.useEffect(() => {
-   localStorage.clear();
- }, [])
+ //localStorage.clear();
   const getData = localStorage.getItem('data');
-  let history = JSON.parse(getData) || [];
-  
+  const [history, setHistory] = React.useState(JSON.parse(getData) || []);  
 
 
 
@@ -97,6 +95,7 @@ function App() {
 
     //Requests to get the location of the device. location would be used to display default forecast
   React.useEffect(() => {
+    setLoadingForecast(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const lati = position.coords.latitude;
@@ -107,8 +106,9 @@ function App() {
       },
       (error) => {
         console.log(error);
+        setFetchSuccess(false);
       });
-
+      setLoadingForecast(false)
   }, [])
 
   React.useEffect(() => {
@@ -117,13 +117,30 @@ function App() {
       const long = weatherForecast.location.lon;
 
       //code to check if current location is already saved in local storage
+      console.log(history);
       const exists = history.some( entry => entry.lat === lat && entry.lon === long); 
       if(!exists){
-        history.push(weatherForecast.location);
-        localStorage.setItem('data', JSON.stringify(history))
+        let newForecast = weatherForecast.location;
+        newForecast.icon = weatherForecast.current.condition.icon,
+        newForecast.temp_c = weatherForecast.current.temp_c;
+        newForecast.temp_f = weatherForecast.current.temp_f;
+        setHistory(histo => [newForecast, ...histo])
+      }else{
+        let updatedHistory = history.filter(entry => entry.lat != lat && entry.lon != long);
+        let newForecast = weatherForecast.location;
+        newForecast.icon = weatherForecast.current.condition.icon,
+        newForecast.temp_c = weatherForecast.current.temp_c;
+        newForecast.temp_f = weatherForecast.current.temp_f;
+        updatedHistory.unshift(newForecast)
+        setHistory(updatedHistory)
       }
     }
   }, [weatherForecast])
+
+  React.useEffect(() => {
+      localStorage.setItem('data', JSON.stringify(history))
+  }, [history])
+
 
     //Refetches updated forecast every 30 seconds
   React.useEffect(() => {
@@ -195,8 +212,8 @@ function App() {
       setFetchSuccess(true);
       //setSearchSuggestions([]);
     }catch(err){
+       setFetchSuccess(false);
       console.log(err);
-      setFetchSuccess(false);
     }finally{
       setLoadingForecast(false);
     }
@@ -204,6 +221,11 @@ function App() {
 
   
   //FUNCTIONS
+
+  function chooseFromRecentSearch(lat, long){
+    chooseLocation(lat,long);
+  }
+
   function chooseForecast(index){
     console.log(index);
     setIndex(index);
@@ -270,6 +292,7 @@ function App() {
       setWeatherForecast(data);
     }catch(err){
       console.log(error);
+      setFetchSuccess(false)
     }
   }
 
@@ -289,47 +312,49 @@ function App() {
   return (
     <>
       <section id='full-app-section'>
-         <Navbar search={searchBarAtt}/>
+         <Navbar search={searchBarAtt} history={history} chooseRecentFunc={chooseFromRecentSearch} isCelsius={isCelsius}/>
         <section id='body-section'>
-        {fetchSuccess ? null : <div id='error-msg-div'>
-          <p>There was an error in fetching your weather forecast request.</p>
-        </div>}
-        {/* <SearchBar ref={searchBarRef} onClick={onSearch} 
-                   searchSuggestions={searchSuggestions} 
-                   handleClick={chooseLocation} 
-                   handleChange={handleChange} 
-                   searching={searching}
-                  searchInput={searchInput}
-                  celsiusBtnClick={celsiusBtnClick}
-                  farenheitBtnClick={farenheitBtnClick}
-                  isCelsius={isCelsius}/> */}
-        {/* <MainForecast weatherForecast={weatherForecast} 
-                      loadingForecast={loadingForecast}/>
-        <SkeletonCards /> */}
-        {loadingForecast ? <SkeletonCards /> : <MainForecast weatherForecast={weatherForecast} 
-                                                            currentHour={currentHour}
-                                                            isCelsius={isCelsius}
-                      />}
-        {/* <FiveDayForecast weatherForecast={weatherForecast} 
-                         ref={hourlyForecastContainer} 
-                         chooseForecast={chooseForecast}
-                         index={index}
-                         loadingForecast={loadingForecast}
-                          />
-        <SkeletonFiveDayForecast /> */}
+          { fetchSuccess ?  <div>
+                  
+          {/* <SearchBar ref={searchBarRef} onClick={onSearch} 
+                    searchSuggestions={searchSuggestions} 
+                    handleClick={chooseLocation} 
+                    handleChange={handleChange} 
+                    searching={searching}
+                    searchInput={searchInput}
+                    celsiusBtnClick={celsiusBtnClick}
+                    farenheitBtnClick={farenheitBtnClick}
+                    isCelsius={isCelsius}/> */}
+          {/* <MainForecast weatherForecast={weatherForecast} 
+                        loadingForecast={loadingForecast}/>
+          <SkeletonCards /> */}
+         
+          {loadingForecast ? <SkeletonCards /> : <MainForecast weatherForecast={weatherForecast} 
+                                                              currentHour={currentHour}
+                                                              isCelsius={isCelsius}
+                        />}
+          {/* <FiveDayForecast weatherForecast={weatherForecast} 
+                          ref={hourlyForecastContainer} 
+                          chooseForecast={chooseForecast}
+                          index={index}
+                          loadingForecast={loadingForecast}
+                            />
+          <SkeletonFiveDayForecast /> */}
 
-        {loadingForecast ? <SkeletonFiveDayForecast /> : <FiveDayForecast weatherForecast={weatherForecast} 
-                         ref={hourlyForecastContainer} 
-                         chooseForecast={chooseForecast}
-                         index={index}
-                         loadingForecast={loadingForecast}
-                         currentHour={currentHour}
-                         getHour={getHour}
-                         isCelsius={isCelsius}
-                        clickNextBtn={clickNextBtn}
-                        clickPrevBtn={clickPrevBtn}
-                        currentIndexDivRef={currentIndexDivRef}
-                          /> }
+          {loadingForecast ? <SkeletonFiveDayForecast /> : 
+                          <FiveDayForecast weatherForecast={weatherForecast} 
+                          ref={hourlyForecastContainer} 
+                          chooseForecast={chooseForecast}
+                          index={index}
+                          loadingForecast={loadingForecast}
+                          currentHour={currentHour}
+                          getHour={getHour}
+                          isCelsius={isCelsius}
+                          clickNextBtn={clickNextBtn}
+                          clickPrevBtn={clickPrevBtn}
+                          currentIndexDivRef={currentIndexDivRef}
+                            /> }
+           </div> : <ErrorWindow /> }
         </section>
       </section>
     </>

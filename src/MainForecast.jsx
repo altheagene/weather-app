@@ -26,7 +26,7 @@ export default function MainForecast(props){
                 {/* <img src="/icons/Sunny-icon.png"></img> */}
                 <div id="current-weather-info">
                     <img src={currentForecast ? currentForecast.condition.icon : null}></img>
-                    <h2>{currentForecast && isCelsius ? currentForecast.temp_c : currentForecast && !isCelsius ? currentForecast.temp_f : null }°</h2>
+                    <h2>{currentForecast && isCelsius ? currentForecast.temp_c : currentForecast && !isCelsius ? currentForecast.temp_f : null } <span id="celsius-or-far-sign">   °{isCelsius ? 'C' : 'F'}</span></h2>
                     <div className="forecast-details-div" id="feels-like-div" >
                         <p className="detail-name">Feels like {currentForecast && isCelsius ? currentForecast.temp_c : currentForecast && !isCelsius ? currentForecast.temp_f + '°' : null}</p>
                     </div>
