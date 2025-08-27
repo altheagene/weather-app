@@ -22,6 +22,7 @@ function App() {
   const [fetchSuccess, setFetchSuccess] = React.useState(true);
   const [isCelsius, setIsCelsius] = React.useState(true);
   const [kebabMenuIndex, setKebabMenuIndex] = React.useState(-1);
+  const [kebabCoordinates, setKebabCoordinates] = React.useState({x: 0, y: 0})
 
  //localStorage.clear();
   const getData = localStorage.getItem('data');
@@ -41,6 +42,7 @@ function App() {
   const lng = React.useRef(null);
   const currentHour = React.useRef(null);
   const currentIndexDivRef = React.useRef(null);
+  const recentSearchesDiv = React.useRef(null);
 
   //VARIABLES
   const currentHisto = localStorage.getItem('data');
@@ -111,6 +113,28 @@ function App() {
       });
       setLoadingForecast(false)
   }, [])
+
+  React.useEffect(() => {
+    document.addEventListener('mousedown', handleMouseDown)
+  })
+
+  function handleMouseDown(e){
+    //setKebabMenuIndex(-1)
+    // if(recentSearchesDiv.current && !recentSearchesDiv.current.contains(e.target)){
+    //   setKebabMenuIndex(-1)
+    // }
+  }
+
+  function outsideClick(){
+    setKebabMenuIndex(-1)
+  }
+
+  function removeItemFromRecent(lat, long){
+    let newhistory = history.filter(histo => histo.lat != lat && histo.lon != long)
+    console.log(history)
+    setHistory(newhistory);
+    setKebabMenuIndex(-1);
+  }
 
   React.useEffect(() => {
     if(Object.keys(weatherForecast).length != 0){
@@ -225,6 +249,7 @@ function App() {
 
   function chooseFromRecentSearch(lat, long){
     chooseLocation(lat,long);
+    setKebabMenuIndex(-1)
   }
 
   function chooseForecast(index){
@@ -310,7 +335,19 @@ function App() {
     isCelsius: isCelsius
   }
 
-  function onKebabClick(index){
+  function onKebabClick(index,e){
+    if(index === kebabMenuIndex){
+      setKebabMenuIndex(-1)
+      return;
+    }
+
+    const parent = e.currentTarget.parentElement;
+    const rect = parent.getBoundingClientRect()
+    const x = rect.left;
+    const y = e.clientY;
+    console.log(x);
+    console.log(y)
+    setKebabCoordinates({x: x, y: y});
     setKebabMenuIndex(index);
   }
 
@@ -322,7 +359,11 @@ function App() {
                   chooseRecentFunc={chooseFromRecentSearch} 
                   isCelsius={isCelsius}
                   kebabMenuIndex={kebabMenuIndex}
-                  onKebabClick={onKebabClick}/>
+                  onKebabClick={onKebabClick}
+                  removeItemFromRecent={removeItemFromRecent}
+                  kebabCoordinates={kebabCoordinates}
+                  recentSearchesDiv={recentSearchesDiv}
+                  outsideClick={outsideClick}/>
         <section id='body-section'>
           { fetchSuccess ?  <div>
                   

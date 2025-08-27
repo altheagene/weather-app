@@ -1,5 +1,6 @@
 import SearchBar from "./SearchBar"
 import React from "react";
+import { createPortal } from "react-dom";
 
 export default function Navbar(props){
 
@@ -12,6 +13,7 @@ export default function Navbar(props){
     const recentSearchesRef = React.useRef(null);
     const recentSearchBtnsRef = React.useRef(null)
     const kebabMenuIndex = props.kebabMenuIndex;
+    const recentSearchDiv = props.recentSearchDiv
 
     const histoButtons = history.map((histo, index) => {
         const region = histo.region != '' ? histo.region : histo.country;
@@ -23,28 +25,40 @@ export default function Navbar(props){
                  style={{
                         backgroundColor: index === 0 ?'rgba(255, 255, 255, 0.2)' : 'background-color: rgb(0, 0, 0, 0.3)'
                     }}>
-                <button class='recent-search-button'
-                    onClick={() => {
-                        recentSearchFunc(lat, lon)
-                        recentSearchesRef.current.scrollTo({left: 0, behavior: 'smooth'})
-                    }} 
-                    >
-                    <div>
-                        {region}
-                    </div>
-                    <div>
-                        {isCelsius ? <p>{histo.temp_c}</p> : <p>{histo.temp_f}</p>}
-                        <img src={histo.icon}></img>
-                    </div>
-                </button>
-                <button id="recent-search-three-dots"
-                        onClick={() => props.onKebabClick(index)}>
-                    <span className="bi bi-three-dots-vertical"></span>
-                </button>
+                <div>
+                    <button class='recent-search-button'
+                            onClick={() => {
+                                recentSearchFunc(lat, lon)
+                                recentSearchesRef.current.scrollTo({left: 0, behavior: 'smooth'})
+                            }}>
+                        <div>
+                            {region}
+                        </div>
+                        <div>
+                            {isCelsius ? <p>{histo.temp_c}</p> : <p>{histo.temp_f}</p>}
+                            <img src={histo.icon}></img>
+                        </div>
+                    </button>
+                    <button id="recent-search-three-dots"
+                            onClick={(e) => props.onKebabClick(index, e)}>
+                        <span className="bi bi-three-dots-vertical"></span>
+                    </button>
+                </div>
+                
                 {kebabMenuIndex === index ?
-                <ul className="kebab-drop-menu">
-                    <button>Remove item</button>
-                </ul> : null}
+                createPortal(
+                <div className="backdrop"
+                    onClick={() => props.outsideClick()}>
+                    
+                    <button className="kebab-drop-menu" 
+                            onClick={() => props.removeItemFromRecent(lat, lon)}
+                            style={{
+                        //top: '60px',
+                        left: props.kebabCoordinates.x
+                    }}
+                    >Remove item</button>
+                </div>,
+                    document.body) : null}
 
             </div>
         )
