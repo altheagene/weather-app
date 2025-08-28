@@ -54,7 +54,7 @@ export default function Navbar(props){
                             onClick={() => props.removeItemFromRecent(lat, lon)}
                             style={{
                         //top: '60px',
-                        left: props.kebabCoordinates.x
+                        left: props.kebabCoordinates.x - 5
                     }}
                     >Remove item</button>
                 </div>,
@@ -72,6 +72,8 @@ export default function Navbar(props){
             leftBtnRef.current.style.opacity = '1';
             rightBtnRef.current.style.opacity = '1';
         }
+
+        props.onKebabClick(-1);
     }
 
     function scrollRight(){
@@ -87,6 +89,7 @@ export default function Navbar(props){
             rightBtnRef.current.style.opacity = '1'
             leftBtnRef.current.style.opacity = '1';
         }
+        props.onKebabClick(-1);
     }
 
     React.useEffect(() => {
@@ -121,7 +124,7 @@ export default function Navbar(props){
                     <div id="recent-searches" ref={recentSearchesRef}>
                         {histoButtons}
                     </div>
-                    <div id="recent-searches-buttons-div" ref={recentSearchBtnsRef} style={{display: 'none'}}>
+                    <div id="recent-searches-nav-btns-div" ref={recentSearchBtnsRef} style={{display: 'none'}}>
                         <button onClick={scrollLeft}
                                 ref={leftBtnRef}>
                             <span className="bi bi-caret-left-fill"></span>
