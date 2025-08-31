@@ -405,27 +405,32 @@ button{
 
 .day-hourly-div button{
     height: 40px;
-    width: 20px;
+    width: 40px;
     z-index: 2;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: 1px solid white;
+    color: whitesmoke
 }
 
 .scroll-right-btn{
     position: absolute;
-    right: 0;
-    top: 70px
+    right: 1rem;
+    top: 80%
 }
 
 .scroll-left-btn{
     position: absolute;
-    left: 0;
-    top: 70px
+    right: 4rem;
+    top: 80%
 }
 
 
 #hourly-forecast-container, #skel-hourly-forecast-container{
     padding: 2rem 1rem;
     width: 100%;
-    height: 200px;
+    height: 250px;
     display: flex;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.118);
