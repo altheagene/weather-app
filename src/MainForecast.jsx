@@ -2,25 +2,27 @@ export default function MainForecast(props){
     const currentForecast = props.weatherForecast.current;
     const currentLocation = props.weatherForecast.location;
     const isCelsius = props.isCelsius;
+    const currentDateTime = props.currentDateTime;
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     //console.log(currentLocation.localtime.split(' '));
-    const dateAndTime = currentLocation ? currentLocation.localtime.split(' ') : null;
-    const date =  currentLocation ? dateAndTime[0].split('-') : null;
-    const month =  currentLocation ? months[Number(date[1]) - 1] : null;
-    const time = currentLocation ? dateAndTime[1].split(':') : null;
-    const hour = currentLocation ? time[0] : null;
-    let actualHour = currentLocation && hour > 12 ? hour-12 : hour;
-    if(actualHour == 0){
-        actualHour = 12;
-    }
-    const suffix = currentLocation && hour > 11 ? 'PM' : 'AM'; 
+    // const dateAndTime = currentLocation ? currentLocation.localtime.split(' ') : null;
+    // const date =  currentLocation ? dateAndTime[0].split('-') : null;
+    // const month =  currentLocation ? months[Number(date[1]) - 1] : null;
+    // const time = currentLocation ? dateAndTime[1].split(':') : null;
+    // const hour = currentLocation ? time[0] : null;
+    // let actualHour = currentLocation && hour > 12 ? hour-12 : hour;
+    // if(actualHour == 0){
+    //     actualHour = 12;
+    // }
+    // const suffix = currentLocation && hour > 11 ? 'PM' : 'AM'; 
 
     return(
         <section id="main-forecast-section">
             <div id="date-location-div">
                 <p id="location-text">{currentForecast ? currentLocation.region : null}, {currentForecast ? currentLocation.country : null}</p>
-                <p id="date-time-text">{currentForecast ? month + ' ' + date[2] + '    ' + Number(actualHour) +  ':' +  time[1]  + ' ' + suffix :  null}</p>
+                {/* <p id="date-time-text">{currentForecast ? month + ' ' + date[2] + '    ' + Number(actualHour) +  ':' +  time[1]  + ' ' + suffix :  null}</p> */}
+                <p id="date-time-text">{currentForecast ? currentDateTime.date + " " + currentDateTime.time :  null}</p>
             </div>
             <div id="current-weather" style={{display: 'flex'}}>
                 {/* <img src="/icons/Sunny-icon.png"></img> */}

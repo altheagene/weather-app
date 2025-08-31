@@ -46,7 +46,7 @@ function DesktopFiveDayForecast(props){
     })
 
     const hourlyForecastElements = fiveDayForecast.map((forecast, foreCastindex) => {
-        console.log(foreCastindex)
+        //console.log(foreCastindex)
         const hourly = forecast.hour;
         const hourlyDivs = hourly.map((hour, index) => {
             const time = props.props.getHour(hour);

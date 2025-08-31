@@ -7,7 +7,7 @@ export default function SearchBar(props){
         
         return(
             <li>
-                <button onClick={() => props.handleClick(suggestion.geometry.lat, suggestion.geometry.lng)}>{suggestion.formatted}</button>
+                <button onClick={() => props.handleClick(suggestion.geometry.lat, suggestion.geometry.lng, suggestion.annotations.timezone.name)}>{suggestion.formatted}</button>
             </li>
         )
     })

@@ -8,28 +8,31 @@ export default function Navbar(props){
     const history = props.history;
     const recentSearchFunc = props.chooseRecentFunc;
     const isCelsius = props.isCelsius;
-    const leftBtnRef = React.useRef(null);
-    const rightBtnRef = React.useRef(null);
-    const recentSearchesRef = React.useRef(null);
-    const recentSearchBtnsRef = React.useRef(null)
+    const leftBtnRef = props.leftBtnRef;
+    const rightBtnRef =  props.rightBtnRef
     const kebabMenuIndex = props.kebabMenuIndex;
-    const recentSearchDiv = props.recentSearchDiv
+    const recentSearchesDiv = props.recentSearchesDiv
+    const recentSearchesNavBtnsRef = props.recentSearchesNavBtnsRef;
+    //const removedRecent = props.removedRecent
 
     const histoButtons = history.map((histo, index) => {
         const region = histo.region != '' ? histo.region : histo.country;
         const lat = histo.lat;
         const lon = histo.lon;
+        const timezone = histo.tz_id
 
         return(
+            <>
+            
             <div className="recent-search-buttons-divs"
                  style={{
                         backgroundColor: index === 0 ?'rgba(255, 255, 255, 0.2)' : 'background-color: rgb(0, 0, 0, 0.3)'
                     }}>
                 <div>
-                    <button class='recent-search-button'
+                    <button className='recent-search-button'
                             onClick={() => {
-                                recentSearchFunc(lat, lon)
-                                recentSearchesRef.current.scrollTo({left: 0, behavior: 'smooth'})
+                                recentSearchFunc(lat, lon, timezone)
+                                recentSearchesDiv.current.scrollTo({left: 0, behavior: 'smooth'})
                             }}>
                         <div>
                             {region}
@@ -61,12 +64,13 @@ export default function Navbar(props){
                     document.body) : null}
 
             </div>
+            </>
         )
     })
 
     function scrollLeft(){
-        recentSearchesRef.current.scrollTo({left: recentSearchesRef.current.scrollLeft - 170, behavior: 'smooth'});
-        if(recentSearchesRef.current.scrollLeft == 0){
+        recentSearchesDiv.current.scrollTo({left: recentSearchesDiv.current.scrollLeft - 170, behavior: 'smooth'});
+        if(recentSearchesDiv.current.scrollLeft == 0){
             leftBtnRef.current.style.opacity = '0.3'
         }else{
             leftBtnRef.current.style.opacity = '1';
@@ -77,12 +81,12 @@ export default function Navbar(props){
     }
 
     function scrollRight(){
-        recentSearchesRef.current.scrollTo({left: recentSearchesRef.current.scrollLeft + 170, behavior: 'smooth'});
+        recentSearchesDiv.current.scrollTo({left: recentSearchesDiv.current.scrollLeft + 170, behavior: 'smooth'});
 
-        const reachedMaxScroll = (Math.floor(recentSearchesRef.current.scrollLeft) + recentSearchesRef.current.offsetWidth) == recentSearchesRef.current.scrollWidth;
-        console.log(recentSearchesRef.current.scrollLeft);
-        console.log(recentSearchesRef.current.offsetWidth);
-        console.log(recentSearchesRef.current.scrollWidth)
+        const reachedMaxScroll = (Math.floor(recentSearchesDiv.current.scrollLeft) + recentSearchesDiv.current.offsetWidth) == recentSearchesDiv.current.scrollWidth;
+        console.log(recentSearchesDiv.current.scrollLeft);
+        console.log(recentSearchesDiv.current.offsetWidth);
+        console.log(recentSearchesDiv.current.scrollWidth)
         if(reachedMaxScroll){
             rightBtnRef.current.style.opacity = '0.3'
         }else{
@@ -91,22 +95,6 @@ export default function Navbar(props){
         }
         props.onKebabClick(-1);
     }
-
-    React.useEffect(() => {
-        const recentSearchDiv = recentSearchesRef.current;
-        console.log(recentSearchesRef.current.scrollWidth);
-        console.log(recentSearchesRef.current.offsetWidth);
-        //recentSearchesRef.current.scrollTo({left: 0, behavior:'smooth'})
-        if(recentSearchesRef.current.scrollWidth > recentSearchesRef.current.offsetWidth){
-            recentSearchBtnsRef.current.style.display = 'block'
-        }
-
-        if(recentSearchesRef.current.scrollLeft == 0){
-            leftBtnRef.current.style.opacity = '0.3'
-        }else{
-            leftBtnRef.current.style.opacity = '1'
-        }
-    }, [history])
 
     return(
         <header id="nav-section">
@@ -121,10 +109,10 @@ export default function Navbar(props){
                   farenheitBtnClick={search.farenheitBtnClick}
                   isCelsius={search.isCelsius}/>
                 <div id="recent-searches-div">
-                    <div id="recent-searches" ref={recentSearchesRef}>
+                    <div id="recent-searches" ref={recentSearchesDiv}>
                         {histoButtons}
                     </div>
-                    <div id="recent-searches-nav-btns-div" ref={recentSearchBtnsRef} style={{display: 'none'}}>
+                    <div id="recent-searches-nav-btns-div" ref={recentSearchesNavBtnsRef} style={{display: 'none'}}>
                         <button onClick={scrollLeft}
                                 ref={leftBtnRef}>
                             <span className="bi bi-caret-left-fill"></span>

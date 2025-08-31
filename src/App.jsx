@@ -23,11 +23,25 @@ function App() {
   const [isCelsius, setIsCelsius] = React.useState(true);
   const [kebabMenuIndex, setKebabMenuIndex] = React.useState(-1);
   const [kebabCoordinates, setKebabCoordinates] = React.useState({x: 0, y: 0})
-
+  const [removedRecent, setRemovedRecent] = React.useState({lati: 0, lon: 0})
+  const [time, setTime] = React.useState();
+  const [timezone,setTimezone] = React.useState(Intl.DateTimeFormat().resolvedOptions().timeZone); //default timezone will be timezone of device's current loc
+  const [currentDateTime, setCurrentDateTime] = React.useState()
  //localStorage.clear();
+ console.log(time);
+ console.log(currentDateTime)
   const getData = localStorage.getItem('data');
   const [history, setHistory] = React.useState(JSON.parse(getData) || []);  
+  const date = new Date();
 
+  // const nyTime = new Intl.DateTimeFormat("en-US", {
+  //   timeZone: "Europe/Paris",
+  //   timeStyle: "short", // gives hh:mm:ss
+  //   dateStyle: "medium"    // optional, gives full date
+  // }).format();
+
+
+  // console.log("New York:", nyTime);
 
 
   
@@ -42,18 +56,34 @@ function App() {
   const lng = React.useRef(null);
   const currentHour = React.useRef(null);
   const currentIndexDivRef = React.useRef(null);
+
   const recentSearchesDiv = React.useRef(null);
+  const recentSearchesNavBtnsRef = React.useRef(null);
+  const leftBtnRef = React.useRef(null);
+  const rightBtnRef = React.useRef(null);
 
   //VARIABLES
   const currentHisto = localStorage.getItem('data');
   const parsedCurrentHisto = JSON.parse(currentHisto);
   if(Object.keys(weatherForecast).length > 0){
-    console.log(weatherForecast)
+    //console.log(weatherForecast)
       const date = weatherForecast.location.localtime.split(' ');
       const time = date[1].split(':');
       currentHour.current = time[0];
       // currentHour.current = hour === 0 ? 12 : hour > 11 ?  hour - 12: hour;
-      console.log(currentHour);
+      //console.log(currentHour);
+
+      const extractSuffix = currentDateTime.time.split(" ");
+      const extractHour = extractSuffix[0].split(":")[0];
+      if(extractSuffix[1].toLowerCase() == 'pm'){
+        const hour = extractHour == 12 ? 12 : extractHour + 12;
+        currentHour.current = hour;
+      }else if (extractSuffix[1].toLowerCase() == 'am'){
+        const hour = extractHour == 12 ? 0 : extractHour;
+         currentHour.current = hour
+      }
+        
+      
   }
 
 
@@ -83,6 +113,7 @@ function App() {
     try{
       const request = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${place}&key=${geocodeKey}&language=en&pretty=1`);
       const data = await request.json();
+      console.log(data)
       setSearchSuggestions(data);
       setSearching(false);
     }catch(err){
@@ -103,7 +134,7 @@ function App() {
       (position) => {
         const lati = position.coords.latitude;
         const long = position.coords.longitude;
-        chooseLocation(lati, long);
+        chooseLocation(lati, long, "Asia/Manila");
         lat.current = lati;
         lng.current = long;
       },
@@ -130,6 +161,7 @@ function App() {
   }
 
   function removeItemFromRecent(lat, long){
+    setRemovedRecent({lati: lat, long: long});
     let newhistory = history.filter(histo => histo.lat != lat && histo.lon != long)
     console.log(history)
     setHistory(newhistory);
@@ -143,8 +175,8 @@ function App() {
 
       //code to check if current location is already saved in local storage
       console.log(history);
-      const exists = history.some( entry => entry.lat === lat && entry.lon === long); 
-      if(!exists){
+      const exists = history.some( entry => entry.lat === lat && entry.lon === long);  //checks if the weather forecast exists in recent searches
+      if(!exists){ 
         let newForecast = weatherForecast.location;
         newForecast.icon = weatherForecast.current.condition.icon,
         newForecast.temp_c = weatherForecast.current.temp_c;
@@ -167,17 +199,79 @@ function App() {
   }, [history])
 
 
+  // React.useEffect(() => {
+  //   setInterval(() => {
+  //     const time = new Intl.DateTimeFormat("en-US", {
+  //       timeZone: timezone,
+  //       timeStyle: "short", // gives hh:mm:ss
+  //       dateStyle: "medium"    // optional, gives full date
+  //     }).format();
+  //     setTime(time);
+  //   }, 30000)
+  // }, [timezone])
+
+
+    React.useEffect(() => {
+
+      const time = new Intl.DateTimeFormat("en-US", {
+        timeZone: timezone,
+        timeStyle: "short", // gives hh:mm:ss
+        dateStyle: "medium"    // optional, gives full date
+        }).format();
+      setTime(time);
+      const splitDateTime = time ? time.split(",") : null;
+      console.log(splitDateTime);
+
+      const formattedDateTime = {
+        date: splitDateTime[0],
+        time: splitDateTime[2]
+      }
+
+      //setCurrentHour
+
+      setCurrentDateTime(formattedDateTime);
+      const interval = setInterval(() => {
+        const time = new Intl.DateTimeFormat("en-US", {
+          timeZone: timezone,
+          timeStyle: "short", // gives hh:mm:ss
+          dateStyle: "medium"    // optional, gives full date
+          }).format();
+        setTime(time);
+        const splitDateTime = time ? time.split(",") : null;
+        
+        const formattedDateTime = {
+          date: splitDateTime[0],
+          time: splitDateTime[2]
+        }
+
+        setCurrentDateTime(formattedDateTime);
+      }, 30000)
+
+      return () => clearInterval(interval)
+    }, [timezone])
+
+    React.useEffect(() => {
+      const splitDateTime = time ? time.split(",") : null;
+      //console.log(splitDateTime);
+      
+    }, [time])
+
+    // React.useEffect(() => {
+    //   setInterval(() => {
+    //     setTime(prev => prev)
+    //   }, [30000])
+    // }, )
     //Refetches updated forecast every 30 seconds
-  React.useEffect(() => {
-      setInterval(() => {
-        refetchForecast();
-      }, 30000);
-  }, [])
+  // React.useEffect(() => {
+  //     setInterval(() => {
+  //       refetchForecast();
+  //     }, 30000);
+  // }, [])
 
   //When user clicks on another day
   React.useEffect(() => {
-    console.log(currentIndexDivRef.current)
-    console.log(index);
+    //console.log(currentIndexDivRef.current)
+    //console.log(index);
     if(currentIndexDivRef.current){
       currentIndexDivRef.current.scrollLeft = 
       currentIndexDivRef.current.scrollWidth - currentIndexDivRef.current.offsetWidth; //default scrollleft is to the max
@@ -223,11 +317,23 @@ function App() {
    }
   }, [index])
 
+  function funcSetTime(name){
+    setTime
+    const time = new Intl.DateTimeFormat("en-US", {
+      timeZone: name,
+      timeStyle: "short", // gives hh:mm:ss
+      dateStyle: "medium"    // optional, gives full date
+    }).format();
+    setTime(time);
+  }
+
 
   //WHEN USER CHOOSES A LOCATION 
-  async function chooseLocation(lati, long){
+  async function chooseLocation(lati, long, timezone){
     lat.current = lati;
     lng.current = long;
+    console.log(timezone);
+    setTimezone(timezone);
     setIndex(0);
     setLoadingForecast(true);
     try{
@@ -247,8 +353,9 @@ function App() {
   
   //FUNCTIONS
 
-  function chooseFromRecentSearch(lat, long){
-    chooseLocation(lat,long);
+  function chooseFromRecentSearch(lat, long, timezoneId){
+    console.log(timezoneId)
+    chooseLocation(lat,long, timezoneId);
     setKebabMenuIndex(-1)
   }
 
@@ -351,6 +458,26 @@ function App() {
     setKebabMenuIndex(index);
   }
 
+    React.useEffect(() => {
+        //recentSearchDiv.current.scrollTo({left: 0, behavior:'smooth'})
+        if(recentSearchesDiv.current){
+          //console.log(recentSearchesDiv.current.scrollWidth);
+          //console.log(recentSearchesDiv.current.offsetWidth);
+
+          if(recentSearchesDiv.current.scrollWidth > recentSearchesDiv.current.offsetWidth){
+            recentSearchesNavBtnsRef.current.style.display = 'block'
+          }else{
+            recentSearchesNavBtnsRef.current.style.display = 'none'
+          }
+
+          if(recentSearchesDiv.current.scrollLeft == 0){
+              leftBtnRef.current.style.opacity = '0.3'
+          }else{
+              leftBtnRef.current.style.opacity = '1'
+          }
+        }
+    }, [history])
+
   return (
     <>
       <section id='full-app-section'>
@@ -363,7 +490,11 @@ function App() {
                   removeItemFromRecent={removeItemFromRecent}
                   kebabCoordinates={kebabCoordinates}
                   recentSearchesDiv={recentSearchesDiv}
-                  outsideClick={outsideClick}/>
+                  outsideClick={outsideClick}
+                  recentSearchesNavBtnsRef={recentSearchesNavBtnsRef}
+                  leftBtnRef={leftBtnRef}
+                  rightBtnRef={rightBtnRef}
+                  removedRecent={removedRecent}/>
         <section id='body-section'>
           { fetchSuccess ?  <div>
                   
@@ -383,6 +514,7 @@ function App() {
           {loadingForecast ? <SkeletonCards /> : <MainForecast weatherForecast={weatherForecast} 
                                                               currentHour={currentHour}
                                                               isCelsius={isCelsius}
+                                                              currentDateTime={currentDateTime}
                         />}
           {/* <FiveDayForecast weatherForecast={weatherForecast} 
                           ref={hourlyForecastContainer} 
