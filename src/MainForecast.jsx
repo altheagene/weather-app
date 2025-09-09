@@ -3,6 +3,7 @@ export default function MainForecast(props){
     const currentLocation = props.weatherForecast.location;
     const isCelsius = props.isCelsius;
     const currentDateTime = props.currentDateTime;
+    const history = props.history;
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     //console.log(currentLocation.localtime.split(' '));
@@ -17,10 +18,38 @@ export default function MainForecast(props){
     // }
     // const suffix = currentLocation && hour > 11 ? 'PM' : 'AM'; 
 
+    //The list of recent searches that will be shown below the city/location
+    const searchHistoList = history.map(element => {
+        
+        return(
+            <li>
+                <button className="search-histo-place">{element.region}, {element.country}</button>
+                <button className="delete-button"><span className="bi bi-trash"></span></button>
+            </li>
+        )
+    })
+
     return(
-        <section id="main-forecast-section">
+        <section>
+            <div id="city-name-div">
+                <h3>{currentForecast ? currentLocation.region : null}, {currentForecast ? currentLocation.country : null}</h3>
+                <button style={{backgroundColor: 'transparent',
+                                      color: 'white',
+                                      border: 'none'
+                              }}
+                            onClick={props.searcHistoButtonFunc}>
+                    <span className="bi bi-caret-down-fill"></span>
+                </button>
+                {props.searchHistoryShow ? 
+                <div id="search-history-div">
+                    <ul>
+                        {searchHistoList}
+                    </ul>
+                </div> : null}
+            </div>
+            <div id="main-forecast-section">
             <div id="date-location-div">
-                <p id="location-text">{currentForecast ? currentLocation.region : null}, {currentForecast ? currentLocation.country : null}</p>
+                <p id="location-text">Current Weather</p>
                 {/* <p id="date-time-text">{currentForecast ? month + ' ' + date[2] + '    ' + Number(actualHour) +  ':' +  time[1]  + ' ' + suffix :  null}</p> */}
                 <p id="date-time-text">{currentForecast ? currentDateTime.date + " " + currentDateTime.time :  null}</p>
             </div>
@@ -65,6 +94,7 @@ export default function MainForecast(props){
                 </div>
             </div>
             {/* <p className="forecast-description">{currentForecast ? currentForecast.condition.text + '' : null}</p> */}
+            </div>
         </section>
     )
 }

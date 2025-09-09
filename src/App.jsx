@@ -26,7 +26,9 @@ function App() {
   const [removedRecent, setRemovedRecent] = React.useState({lati: 0, lon: 0})
   const [time, setTime] = React.useState();
   const [timezone,setTimezone] = React.useState(Intl.DateTimeFormat().resolvedOptions().timeZone); //default timezone will be timezone of device's current loc
-  const [currentDateTime, setCurrentDateTime] = React.useState()
+  const [currentDateTime, setCurrentDateTime] = React.useState();
+  const [searchHistoryShow, setSearchHistoryShow] = React.useState(false);
+
  //localStorage.clear();
  console.log(time);
  console.log(currentDateTime)
@@ -462,6 +464,10 @@ function App() {
     setKebabMenuIndex(index);
   }
 
+  function searcHistoButtonFunc(){
+    setSearchHistoryShow(prev => !prev)
+  }
+
     React.useEffect(() => {
         //recentSearchDiv.current.scrollTo({left: 0, behavior:'smooth'})
         if(recentSearchesDiv.current){
@@ -520,6 +526,9 @@ function App() {
                                                               currentHour={currentHour}
                                                               isCelsius={isCelsius}
                                                               currentDateTime={currentDateTime}
+                                                              searcHistoButtonFunc={searcHistoButtonFunc}
+                                                              searchHistoryShow={searchHistoryShow}
+                                                              history={history}
                         />}
           {/* <FiveDayForecast weatherForecast={weatherForecast} 
                           ref={hourlyForecastContainer} 

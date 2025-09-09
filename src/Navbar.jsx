@@ -17,6 +17,7 @@ export default function Navbar(props){
     const {width} = useWindowSize();
     //const removedRecent = props.removedRecent
 
+
     const histoButtons = history.map((histo, index) => {
         const region = histo.region != '' ? histo.region : histo.country;
         const lat = histo.lat;
