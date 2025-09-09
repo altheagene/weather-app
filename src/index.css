@@ -103,7 +103,7 @@ button{
     background-color: transparent;
     color: white;
     padding-left: 1rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
 }
 
@@ -354,6 +354,10 @@ button{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+}
+
+.daily-forecast-div:hover{
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .skel-daily-forecast-div{
@@ -646,6 +650,11 @@ nav{
     z-index: 7;
 }
 
+.recent-search-buttons-divs:hover{
+    background-color: rgba(255, 255, 255, 0.04);
+    transition: 0.1s linear;
+}
+
 
 .recent-search-buttons-divs > div{
     width: 100%;
@@ -725,6 +734,16 @@ nav{
     border: none;
     color: rgb(221, 221, 221);
     font-size: 1.5rem;
+}
+
+@media (max-width : 1000px){
+    #recent-searches-div{
+        width: 50%;
+    }
+
+    #search-bar-section{
+        width: 50%;
+    }
 }
 
 

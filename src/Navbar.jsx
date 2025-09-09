@@ -1,6 +1,7 @@
 import SearchBar from "./SearchBar"
 import React from "react";
 import { createPortal } from "react-dom";
+import { useWindowSize } from "react-use";
 
 export default function Navbar(props){
 
@@ -13,6 +14,7 @@ export default function Navbar(props){
     const kebabMenuIndex = props.kebabMenuIndex;
     const recentSearchesDiv = props.recentSearchesDiv
     const recentSearchesNavBtnsRef = props.recentSearchesNavBtnsRef;
+    const {width} = useWindowSize();
     //const removedRecent = props.removedRecent
 
     const histoButtons = history.map((histo, index) => {
@@ -77,7 +79,7 @@ export default function Navbar(props){
             rightBtnRef.current.style.opacity = '1';
         }
 
-        props.onKebabClick(-1);
+         props.buttonClick();
     }
 
     function scrollRight(){
@@ -93,7 +95,7 @@ export default function Navbar(props){
             rightBtnRef.current.style.opacity = '1'
             leftBtnRef.current.style.opacity = '1';
         }
-        props.onKebabClick(-1);
+        props.buttonClick();
     }
 
     return(
@@ -108,22 +110,24 @@ export default function Navbar(props){
                   celsiusBtnClick={search.celsiusBtnClick}
                   farenheitBtnClick={search.farenheitBtnClick}
                   isCelsius={search.isCelsius}/>
-                <div id="recent-searches-div">
-                    <div id="recent-searches" ref={recentSearchesDiv}>
-                        {histoButtons}
-                    </div>
-                    <div id="recent-searches-nav-btns-div" ref={recentSearchesNavBtnsRef} style={{display: 'none'}}>
-                        <button onClick={scrollLeft}
-                                ref={leftBtnRef}>
-                            <span className="bi bi-caret-left-fill"></span>
-                        </button>
-                        <button onClick={scrollRight}
-                                ref={rightBtnRef}>
-                            <span className="bi bi-caret-right-fill"></span>
-                        </button>
+                {width > 600 ? 
+                    <div id="recent-searches-div">
+                        <div id="recent-searches" ref={recentSearchesDiv}>
+                            {histoButtons}
+                        </div>
+                        <div id="recent-searches-nav-btns-div" ref={recentSearchesNavBtnsRef} style={{display: 'none'}}>
+                            <button onClick={scrollLeft}
+                                    ref={leftBtnRef}>
+                                <span className="bi bi-caret-left-fill"></span>
+                            </button>
+                            <button onClick={scrollRight}
+                                    ref={rightBtnRef}>
+                                <span className="bi bi-caret-right-fill"></span>
+                            </button>
 
-                    </div>
-                </div>
+                        </div>
+                </div> : <span class="bi bi-clock-history"
+                                style={{ color: 'white'}}></span>}
                 <div id="temp-format-btns">
                     <button onClick={search.farenheitBtnClick}
                             style={{

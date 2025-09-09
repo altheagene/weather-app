@@ -442,6 +442,10 @@ function App() {
     isCelsius: isCelsius
   }
 
+  function buttonClick(){
+    setKebabMenuIndex(-1);
+  }
+
   function onKebabClick(index,e){
     if(index === kebabMenuIndex){
       setKebabMenuIndex(-1)
@@ -494,7 +498,8 @@ function App() {
                   recentSearchesNavBtnsRef={recentSearchesNavBtnsRef}
                   leftBtnRef={leftBtnRef}
                   rightBtnRef={rightBtnRef}
-                  removedRecent={removedRecent}/>
+                  removedRecent={removedRecent}
+                  buttonClick={buttonClick}/>
         <section id='body-section'>
           { fetchSuccess ?  <div>
                   
