@@ -168,6 +168,7 @@ function App() {
     console.log(history)
     setHistory(newhistory);
     setKebabMenuIndex(-1);
+    setSearchHistoryShow(false)
   }
 
   React.useEffect(() => {
@@ -358,7 +359,8 @@ function App() {
   function chooseFromRecentSearch(lat, long, timezoneId){
     console.log(timezoneId)
     chooseLocation(lat,long, timezoneId);
-    setKebabMenuIndex(-1)
+    setKebabMenuIndex(-1);
+    setSearchHistoryShow(false);
   }
 
   function chooseForecast(index){
@@ -529,6 +531,8 @@ function App() {
                                                               searcHistoButtonFunc={searcHistoButtonFunc}
                                                               searchHistoryShow={searchHistoryShow}
                                                               history={history}
+                                                              chooseRecentFunc={chooseFromRecentSearch}
+                                                              removeItemFromRecent={removeItemFromRecent}
                         />}
           {/* <FiveDayForecast weatherForecast={weatherForecast} 
                           ref={hourlyForecastContainer} 

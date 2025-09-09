@@ -23,8 +23,11 @@ export default function MainForecast(props){
         
         return(
             <li>
-                <button className="search-histo-place">{element.region}, {element.country}</button>
-                <button className="delete-button"><span className="bi bi-trash"></span></button>
+                <button className="search-histo-place"
+                        onClick={() => props.chooseRecentFunc(element.lat, element.lon, element.timezone)}
+                >{element.region}, {element.country}</button>
+                <button className="delete-button"
+                        onClick={() => props.removeItemFromRecent(element.lat, element.lon)}><span className="bi bi-trash"></span></button>
             </li>
         )
     })
@@ -42,6 +45,7 @@ export default function MainForecast(props){
                 </button>
                 {props.searchHistoryShow ? 
                 <div id="search-history-div">
+                    <p>Recent Searches</p>
                     <ul>
                         {searchHistoList}
                     </ul>
