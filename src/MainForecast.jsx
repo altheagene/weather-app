@@ -38,18 +38,23 @@ export default function MainForecast(props){
                 <h3>{currentForecast ? currentLocation.region : null}, {currentForecast ? currentLocation.country : null}</h3>
                 <button style={{backgroundColor: 'transparent',
                                       color: 'white',
-                                      border: 'none'
+                                      border: 'none',
+                                      zIndex: '4'
                               }}
                             onClick={props.searcHistoButtonFunc}>
                     <span className="bi bi-caret-down-fill"></span>
                 </button>
                 {props.searchHistoryShow ? 
-                <div id="search-history-div">
-                    <p>Recent Searches</p>
-                    <ul>
-                        {searchHistoList}
-                    </ul>
-                </div> : null}
+                <>
+                    <div id="search-history-bg-div"
+                         onClick={props.outsideClick}></div>
+                    <div id="search-history-div">
+                        <p>Recent Searches</p>
+                        <ul>
+                            {searchHistoList}
+                        </ul>
+                    </div>
+                </>: null}
             </div>
             <div id="main-forecast-section">
             <div id="date-location-div">

@@ -66,7 +66,8 @@ button{
     border: none;
     transition: 0.15s ease-in-out;
     font-weight: 700;
-    font-size: 1.1rem;;
+    font-size: 1.1rem;
+    z-index: 4
 }
 
 #suggestions-div{
@@ -159,8 +160,17 @@ button{
     padding: 1rem;
     top: 1.5rem;
     position: absolute;
-    z-index: 3;
+    z-index: 4;
     border-radius: 10px;
+}
+
+#search-history-bg-div{
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    background-color: transparent;
+    z-index: 3;
+    
 }
 
 #search-history-div ul{
@@ -196,6 +206,7 @@ button{
 .delete-button{
     width: 10%;
     color: red;
+    font-size: 1.2rem;
 
 
 }
@@ -735,7 +746,7 @@ nav{
     display: block;
     position: absolute;
     top: 4rem; 
-    z-index: 100;
+    z-index: 8;
 }
 
 .kebab-drop-menu > button{
@@ -785,7 +796,7 @@ nav{
 }
 
 #recent-searches-nav-btns-div{
-    z-index: 10;
+    z-index: 9;
 }
 
 #recent-searches-nav-btns-div button{

@@ -18,7 +18,7 @@ function App() {
   const [searching, setSearching] = React.useState(false);
   const [searchInput, setSearchInput] = React.useState('');
   const [index, setIndex] = React.useState(0);
-  const [loadingForecast, setLoadingForecast] = React.useState(false);
+  const [loadingForecast, setLoadingForecast] = React.useState(true);
   const [fetchSuccess, setFetchSuccess] = React.useState(true);
   const [isCelsius, setIsCelsius] = React.useState(true);
   const [kebabMenuIndex, setKebabMenuIndex] = React.useState(-1);
@@ -30,22 +30,8 @@ function App() {
   const [searchHistoryShow, setSearchHistoryShow] = React.useState(false);
 
  //localStorage.clear();
- console.log(time);
- console.log(currentDateTime)
   const getData = localStorage.getItem('data');
   const [history, setHistory] = React.useState(JSON.parse(getData) || []);  
-  const date = new Date();
-
-  // const nyTime = new Intl.DateTimeFormat("en-US", {
-  //   timeZone: "Europe/Paris",
-  //   timeStyle: "short", // gives hh:mm:ss
-  //   dateStyle: "medium"    // optional, gives full date
-  // }).format();
-
-
-  // console.log("New York:", nyTime);
-
-
   
   // API KEYS
   const geocodeKey = 'b0999bd292c0481780cddfd09d8fc6ee';
@@ -58,6 +44,8 @@ function App() {
   const lng = React.useRef(null);
   const currentHour = React.useRef(null);
   const currentIndexDivRef = React.useRef(null);
+  const backgroundRef1 = React.useRef(null);
+  const backgroundRef2 = React.useRef(null);
 
   const recentSearchesDiv = React.useRef(null);
   const recentSearchesNavBtnsRef = React.useRef(null);
@@ -68,12 +56,9 @@ function App() {
   const currentHisto = localStorage.getItem('data');
   const parsedCurrentHisto = JSON.parse(currentHisto);
   if(Object.keys(weatherForecast).length > 0){
-    //console.log(weatherForecast)
       const date = weatherForecast.location.localtime.split(' ');
       const time = date[1].split(':');
       currentHour.current = time[0];
-      // currentHour.current = hour === 0 ? 12 : hour > 11 ?  hour - 12: hour;
-      //console.log(currentHour);
 
       const extractSuffix = currentDateTime.time.split(" ");
       const extractHour = extractSuffix[0].split(":")[0];
@@ -127,7 +112,16 @@ function App() {
     setSearchInput(searchBarRef.current.value);
   }
 
+  // React.useEffect(() => {
+  //   backgroundRef2.current.addEventListener('click', handleBGClick)
+  // })
+
+function handleBGClick(){
+  setSearchHistoryShow(false)
+}
+
   //USE EFFECTS
+
 
     //Requests to get the location of the device. location would be used to display default forecast
   React.useEffect(() => {
@@ -139,6 +133,7 @@ function App() {
         chooseLocation(lati, long, "Asia/Manila");
         lat.current = lati;
         lng.current = long;
+        setCoordinates({lat: lati, long: long})
       },
       (error) => {
         console.log(error);
@@ -159,7 +154,8 @@ function App() {
   }
 
   function outsideClick(){
-    setKebabMenuIndex(-1)
+    setKebabMenuIndex(-1);
+    setSearchHistoryShow(false);
   }
 
   function removeItemFromRecent(lat, long){
@@ -357,12 +353,16 @@ function App() {
   //FUNCTIONS
 
   function chooseFromRecentSearch(lat, long, timezoneId){
+    console.log('AAAAAAAAAAAAAAAA')
     console.log(timezoneId)
     chooseLocation(lat,long, timezoneId);
     setKebabMenuIndex(-1);
     setSearchHistoryShow(false);
   }
 
+  React.useEffect(() => {
+   // console.log(Coo)
+  })
   function chooseForecast(index){
     console.log(index);
     setIndex(index);
@@ -389,10 +389,12 @@ function App() {
 
   function farenheitBtnClick(){
     setIsCelsius(false);
+    setKebabMenuIndex(-1)
   }
 
   function celsiusBtnClick(){
     setIsCelsius(true);
+    setKebabMenuIndex(-1)
   }
 
 
@@ -453,6 +455,7 @@ function App() {
   function onKebabClick(index,e){
     if(index === kebabMenuIndex){
       setKebabMenuIndex(-1)
+      //setSearchHistoryShow(false)
       return;
     }
 
@@ -460,10 +463,9 @@ function App() {
     const rect = parent.getBoundingClientRect()
     const x = rect.left;
     const y = e.clientY;
-    console.log(x);
-    console.log(y)
     setKebabCoordinates({x: x, y: y});
     setKebabMenuIndex(index);
+    setSearchHistoryShow(false)
   }
 
   function searcHistoButtonFunc(){
@@ -471,10 +473,7 @@ function App() {
   }
 
     React.useEffect(() => {
-        //recentSearchDiv.current.scrollTo({left: 0, behavior:'smooth'})
         if(recentSearchesDiv.current){
-          //console.log(recentSearchesDiv.current.scrollWidth);
-          //console.log(recentSearchesDiv.current.offsetWidth);
 
           if(recentSearchesDiv.current.scrollWidth > recentSearchesDiv.current.offsetWidth){
             recentSearchesNavBtnsRef.current.style.display = 'block'
@@ -507,22 +506,11 @@ function App() {
                   leftBtnRef={leftBtnRef}
                   rightBtnRef={rightBtnRef}
                   removedRecent={removedRecent}
-                  buttonClick={buttonClick}/>
+                  buttonClick={buttonClick}
+                  weatherForecast={weatherForecast}/>
         <section id='body-section'>
           { fetchSuccess ?  <div>
                   
-          {/* <SearchBar ref={searchBarRef} onClick={onSearch} 
-                    searchSuggestions={searchSuggestions} 
-                    handleClick={chooseLocation} 
-                    handleChange={handleChange} 
-                    searching={searching}
-                    searchInput={searchInput}
-                    celsiusBtnClick={celsiusBtnClick}
-                    farenheitBtnClick={farenheitBtnClick}
-                    isCelsius={isCelsius}/> */}
-          {/* <MainForecast weatherForecast={weatherForecast} 
-                        loadingForecast={loadingForecast}/>
-          <SkeletonCards /> */}
          
           {loadingForecast ? <SkeletonCards /> : <MainForecast weatherForecast={weatherForecast} 
                                                               currentHour={currentHour}
@@ -533,14 +521,9 @@ function App() {
                                                               history={history}
                                                               chooseRecentFunc={chooseFromRecentSearch}
                                                               removeItemFromRecent={removeItemFromRecent}
+                                                              backgroundRef2={backgroundRef2}
+                                                              outsideClick={outsideClick}
                         />}
-          {/* <FiveDayForecast weatherForecast={weatherForecast} 
-                          ref={hourlyForecastContainer} 
-                          chooseForecast={chooseForecast}
-                          index={index}
-                          loadingForecast={loadingForecast}
-                            />
-          <SkeletonFiveDayForecast /> */}
 
           {loadingForecast ? <SkeletonFiveDayForecast /> : 
                           <FiveDayForecast weatherForecast={weatherForecast} 

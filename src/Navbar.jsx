@@ -15,9 +15,9 @@ export default function Navbar(props){
     const recentSearchesDiv = props.recentSearchesDiv
     const recentSearchesNavBtnsRef = props.recentSearchesNavBtnsRef;
     const {width} = useWindowSize();
-    //const removedRecent = props.removedRecent
+    const weatherForecast = props.weatherForecast.location;
 
-
+console.log(weatherForecast)
     const histoButtons = history.map((histo, index) => {
         const region = histo.region != '' ? histo.region : histo.country;
         const lat = histo.lat;
@@ -29,7 +29,7 @@ export default function Navbar(props){
             
             <div className="recent-search-buttons-divs"
                  style={{
-                        backgroundColor: index === 0 ?'rgba(255, 255, 255, 0.2)' : 'background-color: rgb(0, 0, 0, 0.3)'
+                        backgroundColor: weatherForecast && weatherForecast.lat === lat && weatherForecast.lon === lon ? 'rgba(255, 255, 255, 0.2)' : ' rgba(0, 0, 0, 0.3)'
                     }}>
                 <div>
                     <button className='recent-search-button'
@@ -127,7 +127,8 @@ export default function Navbar(props){
                             </button>
 
                         </div>
-                </div> : <span class="bi bi-clock-history"
+                </div> : 
+                <span 
                                 style={{ color: 'white'}}></span>}
                 <div id="temp-format-btns">
                     <button onClick={search.farenheitBtnClick}
