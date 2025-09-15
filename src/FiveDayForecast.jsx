@@ -50,6 +50,7 @@ function DesktopFiveDayForecast(props){
         const hourly = forecast.hour;
         const hourlyDivs = hourly.map((hour, index) => {
             const time = props.props.getHour(hour);
+            console.log(hour);
                 if(index >= 0){
                     return(
                         <div style={{
@@ -60,12 +61,22 @@ function DesktopFiveDayForecast(props){
                                 style={{backgroundColor: time.militaryHour === props.props.currentHour.current && foreCastindex  == 0 ? '#3A59D1' : ''}}>
                                 <p className="time">{time.actualHour + ' ' + time.suffix}</p>
                                 {/* <p>{hour.condition.text}</p> */}
-                                <img src={hour.condition.icon} 
-                                    className="hour-forecast-icon"
-                                    style={{
-                                        height: '40px'
-                                    }}/>
-                                <p>{isCelsius ? hour.temp_c : hour.temp_f}°</p>
+
+                                <div>
+                                    <img src={hour.condition.icon} 
+                                        className="hour-forecast-icon"
+                                        style={{
+                                            height: '50px',
+                                            width: '50px'
+                                        }}/>
+                                    <p>{isCelsius ? hour.temp_c : hour.temp_f}° </p>
+                                </div>
+                                
+                                <div>
+                                    <p className="other-details"><span className="bi bi-thermometer-half"></span>{isCelsius ? hour.temp_c : hour.temp_f}°</p>
+                                    <p className="other-details"><span className="bi bi-droplet-fill"> </span>{hour.chance_of_rain + '%'}</p>
+                                    <p className="other-details"><span className="bi bi-wind"></span> {hour.wind_mph+ 'mph'}</p>
+                                </div>
                             </div>
                         </div>
                     )

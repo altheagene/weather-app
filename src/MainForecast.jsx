@@ -163,7 +163,7 @@ export default function MainForecast(props){
                                             'Slightly humid, still comfortable for most.' :
                                             'Dry and comfortable air.'
                             }
-                            detail={currentForecast.vis_km + '°'} /> : 
+                            detail={currentForecast.dewpoint_c + '°'} /> : 
                     <ToolTip str="Dew point"
                             tooltipText={currentForecast.dewpoint_f > 68 ?
                                             'Oppressive and very humid, strong chance of storms.' :
@@ -173,7 +173,7 @@ export default function MainForecast(props){
                                             'Slightly humid, still comfortable for most.' :
                                             'Dry and comfortable air.'
                             }
-                            detail={currentForecast.vis_km + '°'} />}
+                            detail={currentForecast.dewpoint_f + '°'} />}
                 <ToolTip str="UV Index"
                             tooltipText={currentForecast.uv > 10 ?
                                             'Extreme risk. Unprotected skin can burn in minutes.' :
