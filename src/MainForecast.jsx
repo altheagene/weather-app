@@ -1,3 +1,22 @@
+import React from "react";
+
+    function ToolTip({str, tooltipText, detail}){
+
+        const [show, setShow] = React.useState(false);
+
+        return(
+            <div className="forecast-details-div">
+                <p className="detail-name"
+                    onMouseEnter={() => setShow(true)}
+                    onMouseLeave={() => setShow(false)}>{str}</p>
+                <p className="detail-value">{detail}</p>
+                {show ? <div className="tool-tip">
+                    {tooltipText}
+                </div> : null}
+            </div>
+        )
+    }
+
 export default function MainForecast(props){
     const currentForecast = props.weatherForecast.current;
     const currentLocation = props.weatherForecast.location;
@@ -77,30 +96,116 @@ export default function MainForecast(props){
                     <p className="detail-name">Feels like</p>
                     <p className="detail-value">{currentForecast ? currentForecast.feelslike_c + '°' : null}</p>
                 </div> */}
-                <div className="forecast-details-div">
-                    <p className="detail-name">Humidity</p>
+                {/* <div className="forecast-details-div">
+                    <p className="detail-name"
+                        >
+                        Humidity</p>
                     <p className="detail-value">{currentForecast ? currentForecast.humidity + '%' : null}</p>
-                </div>
-                <div className="forecast-details-div">
+                    <div className="tool-tip">
+                        {currentForecast.humidity > 70 ?
+                        <p>Muggy and damp. High chance of rain, fog, or storms.</p> : 
+                        currentForecast > 50 ?
+                        <p>Humid air. Clouds and light rain possible.</p>:
+                        currentForecast > 30 ?
+                        <p>Comfortable air. Fair weather conditions.</p>:
+                        <p>Dry air, clear skies likely. Rain is very unlikely.</p>
+                        }
+                    </div>
+                </div>*/}
+                <ToolTip str="Humidity" 
+                        tooltipText={currentForecast.humidity > 70 ?
+                                    'Muggy and damp. High chance of rain, fog, or storms.': 
+                                    currentForecast > 50 ?
+                                    'Humid air. Clouds and light rain possible.' :
+                                    currentForecast > 30 ?
+                                    'Comfortable air. Fair weather conditions.':
+                                    'Dry air, clear skies likely. Rain is very unlikely.'} 
+                        detail={currentForecast.humidity + "%"}/>
+                <ToolTip str='Wind'
+                         tooltipText={currentForecast.wind_kph > 50 ?
+                                    'Gusty and dangerous. May cause damage or travel issues.' :
+                                    currentForecast.wind_kph > 30 ?
+                                    'Strong winds, can blow around light objects.' : 
+                                    currentForecast.wind_kph > 10 ?
+                                    'Light to moderate winds, pleasant outdoors.' :
+                                    'Calm breeze, barely noticeable.'
+                         }
+                         detail={currentForecast.wind_kph + 'km/h'} />
+                <ToolTip str="Visibility"
+                         tooltipText={currentForecast.vis_km > 10 ?
+                                        '(Excellent) Clear air, great for outdoor activities.' :
+                                        currentForecast.vis_km > 5 ?
+                                        '(Good) Mostly clear, minor haze possible.' :
+                                        currentForecast.vis_km > 2 ?
+                                        '(Moderate) Reduced clarity, haze or light fog present.' :
+                                         currentForecast.vis_km > 1 ?
+                                        '(Poor) Low visibility, fog, rain, or smoke likely.' :
+                                        '(Very Poor) Severe fog, heavy rain, or snow. Travel is hazardous.'
+                         }
+                         detail={currentForecast.vis_km + 'km'} />
+                <ToolTip str="Pressure"
+                         tooltipText={currentForecast.pressure_mb > 1020 ?
+                                        'Stable and calm weather, usually clear skies.' :
+                                        currentForecast.pressure_mb > 999 ?
+                                        'Typical pressure, fair or mixed conditions.' :
+                                        currentForecast.pressure_mb > 979 ?
+                                        'Unsettled weather, clouds and rain more likely.' :
+                                        'Stormy or severe weather possible.'
+                         }
+                         detail={currentForecast.vis_km + 'km'} />
+                {isCelsius ? 
+                    <ToolTip str="Dew point"
+                            tooltipText={currentForecast.dewpoint_c > 20 ?
+                                            'Oppressive and very humid, strong chance of storms.' :
+                                            currentForecast.dewpoint_c > 16 ?
+                                            'Humid and sticky, discomfort noticeable.' :
+                                             currentForecast.dewpoint_c > 9 ?
+                                            'Slightly humid, still comfortable for most.' :
+                                            'Dry and comfortable air.'
+                            }
+                            detail={currentForecast.vis_km + '°'} /> : 
+                    <ToolTip str="Dew point"
+                            tooltipText={currentForecast.dewpoint_f > 68 ?
+                                            'Oppressive and very humid, strong chance of storms.' :
+                                            currentForecast.dewpoint_f > 60 ?
+                                            'Humid and sticky, discomfort noticeable.' :
+                                             currentForecast.dewpoint_f > 49 ?
+                                            'Slightly humid, still comfortable for most.' :
+                                            'Dry and comfortable air.'
+                            }
+                            detail={currentForecast.vis_km + '°'} />}
+                <ToolTip str="UV Index"
+                            tooltipText={currentForecast.uv > 10 ?
+                                            'Extreme risk. Unprotected skin can burn in minutes.' :
+                                            currentForecast.uv > 7 ?
+                                            'Very high risk. Avoid midday sun, use strong protection.' :
+                                            currentForecast.uv > 5 ?
+                                            'High risk. Protection needed (hat, sunscreen).' :
+                                            currentForecast.uv > 2 ?
+                                            'Moderate risk. Use sunscreen if outside for long.' :
+                                            'Minimal risk from the sun. Safe for outdoor activities.'
+                            }
+                            detail={currentForecast.uv} />
+                {/* <div className="forecast-details-div">
                     <p className="detail-name">Wind</p>
                     <p className="detail-value">{currentForecast ? currentForecast.wind_kph + 'km/h' : null}</p>
-                </div>
-                <div className="forecast-details-div">
+                </div> */}
+                {/* <div className="forecast-details-div">
                     <p className="detail-name">Visibility</p>
                     <p className="detail-value">{currentForecast ? currentForecast.vis_km + 'km' : null}</p>
-                </div>
-                <div className="forecast-details-div">
+                </div> */}
+                {/* <div className="forecast-details-div">
                     <p className="detail-name">Pressure</p>
                     <p className="detail-value">{currentForecast ? currentForecast.pressure_mb + 'mb' : null}</p>
-                </div>
-                <div className="forecast-details-div">
+                </div> */}
+                {/* <div className="forecast-details-div">
                     <p className="detail-name">Dew point</p>
                     <p className="detail-value">{currentForecast && isCelsius? currentForecast.dewpoint_c + '°' : currentForecast && !isCelsius ? currentForecast.dewpoint_f + '°': null}</p>
-                </div>
-                <div className="forecast-details-div">
+                </div> */}
+                {/* <div className="forecast-details-div">
                     <p className="detail-name">UV Index</p>
                     <p className="detail-value">{currentForecast ? currentForecast.uv + '' : null}</p>
-                </div>
+                </div> */}
             </div>
             {/* <p className="forecast-description">{currentForecast ? currentForecast.condition.text + '' : null}</p> */}
             </div>
