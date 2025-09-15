@@ -139,7 +139,7 @@ function handleBGClick(){
         console.log(error);
         setFetchSuccess(false);
       });
-      setLoadingForecast(false)
+      //setLoadingForecast(false)
   }, [])
 
   React.useEffect(() => {
@@ -329,12 +329,12 @@ function handleBGClick(){
 
   //WHEN USER CHOOSES A LOCATION 
   async function chooseLocation(lati, long, timezone){
+    setLoadingForecast(true);
     lat.current = lati;
     lng.current = long;
     console.log(timezone);
     setTimezone(timezone);
     setIndex(0);
-    setLoadingForecast(true);
     try{
       const request = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${weatherAPIkey}&q=${lat.current}, ${lng.current}&days=5&aqi=no&alerts=no`);
       const data = await request.json();
