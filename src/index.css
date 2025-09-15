@@ -276,7 +276,14 @@ button{
 }
 
 .detail-name{
-    color: rgba(255, 255, 255, 0.7)
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+}
+
+.detail-name:hover{
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .forecast-details-div{
@@ -490,7 +497,7 @@ button{
 
 .day-hourly-div > div{
     flex-shrink: 0;
-    height: 100%;
+    height: 90%;
     width: 128px;
 }
 
@@ -508,20 +515,20 @@ button{
 .scroll-right-btn{
     position: absolute;
     right: 1rem;
-    top: 80%
+    top: 85%
 }
 
 .scroll-left-btn{
     position: absolute;
     right: 4rem;
-    top: 80%
+    top: 85%
 }
 
 
 #hourly-forecast-container, #skel-hourly-forecast-container{
     padding: 2rem 1rem;
     width: 100%;
-    height: 300px;
+    height: 350px;
     display: flex;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.118);
@@ -566,7 +573,6 @@ button{
 
 .other-details{
     font-size: 0.9rem;
-    padding-bottom: 0.2rem;
 }
 
 @media (max-width: 700px){

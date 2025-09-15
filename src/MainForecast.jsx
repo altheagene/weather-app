@@ -8,7 +8,10 @@ import React from "react";
             <div className="forecast-details-div">
                 <p className="detail-name"
                     onMouseEnter={() => setShow(true)}
-                    onMouseLeave={() => setShow(false)}>{str}</p>
+                    onMouseLeave={() => setShow(false)}>{str}<span className="bi bi-info-circle"
+                                                                    style={{
+                                                                        fontSize: '0.6rem',
+                                                                    }}></span></p>
                 <p className="detail-value">{detail}</p>
                 {show ? <div className="tool-tip">
                     {tooltipText}

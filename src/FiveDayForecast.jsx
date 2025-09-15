@@ -69,13 +69,17 @@ function DesktopFiveDayForecast(props){
                                             height: '50px',
                                             width: '50px'
                                         }}/>
-                                    <p>{isCelsius ? hour.temp_c : hour.temp_f}° </p>
+                                    <p style={{fontSize: '1.2rem', fontWeight: '500'}}>{isCelsius ? hour.temp_c : hour.temp_f}° </p>
                                 </div>
                                 
-                                <div>
-                                    <p className="other-details"><span className="bi bi-thermometer-half"></span>{isCelsius ? hour.temp_c : hour.temp_f}°</p>
-                                    <p className="other-details"><span className="bi bi-droplet-fill"> </span>{hour.chance_of_rain + '%'}</p>
-                                    <p className="other-details"><span className="bi bi-wind"></span> {hour.wind_mph+ 'mph'}</p>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '0.6rem'
+                                }}>
+                                    <p className="other-details"><span className="bi bi-thermometer-half">  </span>{ isCelsius ? hour.temp_c : hour.temp_f}°</p>
+                                    <p className="other-details"><span className="bi bi-droplet-fill">  </span>{ hour.chance_of_rain + '%'}</p>
+                                    <p className="other-details"><span className="bi bi-wind"></span>  { hour.wind_mph+ 'mph'}</p>
                                 </div>
                             </div>
                         </div>
