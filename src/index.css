@@ -715,7 +715,7 @@ nav{
 }
 
 #recent-searches{
-    width: 90%;
+    width: 85%;
     display: flex;
     gap: 0.5rem;
     overflow:visible;
@@ -830,6 +830,7 @@ nav{
 }
 
 #recent-searches-nav-btns-div button{
+    width: 50%;
     background-color: transparent;
     border: none;
     color: rgb(221, 221, 221);

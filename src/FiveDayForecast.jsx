@@ -50,7 +50,6 @@ function DesktopFiveDayForecast(props){
         const hourly = forecast.hour;
         const hourlyDivs = hourly.map((hour, index) => {
             const time = props.props.getHour(hour);
-            console.log(hour);
                 if(index >= 0){
                     return(
                         <div style={{
@@ -62,7 +61,7 @@ function DesktopFiveDayForecast(props){
                                 <p className="time">{time.actualHour + ' ' + time.suffix}</p>
                                 {/* <p>{hour.condition.text}</p> */}
 
-                                <div>
+                                <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                                     <img src={hour.condition.icon} 
                                         className="hour-forecast-icon"
                                         style={{
@@ -156,6 +155,11 @@ function DesktopFiveDayForecast(props){
             </div>
             <div id="hourly-forecast-container" ref={props.props.ref}>
                 {hourlyForecastElements}
+                <div style={{display: 'flex', gap: '1.5rem', position: 'absolute', bottom: '1rem', color: 'rgba(255, 255, 255, 0.68)'}}>
+                    <p><span className="bi bi-thermometer-half"></span> Feels like</p>
+                    <p><span className="bi bi-droplet-fill"></span> Precipitation</p>
+                    <p><span className="bi bi-wind"></span> Wind</p>
+                </div>
             </div>
         </section>
     )

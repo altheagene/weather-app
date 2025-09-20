@@ -28,6 +28,9 @@ function App() {
   const [timezone,setTimezone] = React.useState(Intl.DateTimeFormat().resolvedOptions().timeZone); //default timezone will be timezone of device's current loc
   const [currentDateTime, setCurrentDateTime] = React.useState();
   const [searchHistoryShow, setSearchHistoryShow] = React.useState(false);
+  const [width, setWidth] = React.useState()
+
+  window.addEventListener('resize', () => setWidth(window.innerWidth))
 
  //localStorage.clear();
   const getData = localStorage.getItem('data');
@@ -487,7 +490,7 @@ function handleBGClick(){
               leftBtnRef.current.style.opacity = '1'
           }
         }
-    }, [history])
+    }, [history, width])
 
   return (
     <>
