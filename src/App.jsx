@@ -1,7 +1,6 @@
 
 import './App.css'
 import MainForecast from './MainForecast';
-import SearchBar from './SearchBar';
 import FiveDayForecast from './FiveDayForecast';
 import React from 'react'
 import { useWindowSize } from 'react-use';
@@ -23,7 +22,6 @@ function App() {
   const [isCelsius, setIsCelsius] = React.useState(true);
   const [kebabMenuIndex, setKebabMenuIndex] = React.useState(-1);
   const [kebabCoordinates, setKebabCoordinates] = React.useState({x: 0, y: 0})
-  const [removedRecent, setRemovedRecent] = React.useState({lati: 0, lon: 0})
   const [time, setTime] = React.useState();
   const [timezone,setTimezone] = React.useState(Intl.DateTimeFormat().resolvedOptions().timeZone); //default timezone will be timezone of device's current loc
   const [currentDateTime, setCurrentDateTime] = React.useState();
@@ -57,7 +55,6 @@ function App() {
 
   //VARIABLES
   const currentHisto = localStorage.getItem('data');
-  const parsedCurrentHisto = JSON.parse(currentHisto);
   if(Object.keys(weatherForecast).length > 0){
       const date = weatherForecast.location.localtime.split(' ');
       const time = date[1].split(':');
@@ -75,26 +72,6 @@ function App() {
         
       
   }
-
-
-
-  // React.useEffect(() => {
-  //   const date = weatherForecast.location.localtime.split(' ');
-  //   const time = date[1].split(':');
-  //   const hour = time[1];
-  //   console.log(hour);
-
-  // }, []);
-
-  // setTimeout(() => {
-  //   setInterval(() => {
-  //   refetchForecast();
-  // }, 5000)
-  // React.useEffect(() => {
-  //    chooseLocation(coordinates.lat, coordinates.lng)
-  // }, [coordinates])
-
-  // }, 5000);
 
 
   //SearchBar Functions
@@ -115,16 +92,8 @@ function App() {
     setSearchInput(searchBarRef.current.value);
   }
 
-  // React.useEffect(() => {
-  //   backgroundRef2.current.addEventListener('click', handleBGClick)
-  // })
-
-function handleBGClick(){
-  setSearchHistoryShow(false)
-}
 
   //USE EFFECTS
-
 
     //Requests to get the location of the device. location would be used to display default forecast
   React.useEffect(() => {
@@ -142,19 +111,7 @@ function handleBGClick(){
         console.log(error);
         setFetchSuccess(false);
       });
-      //setLoadingForecast(false)
   }, [])
-
-  React.useEffect(() => {
-    document.addEventListener('mousedown', handleMouseDown)
-  })
-
-  function handleMouseDown(e){
-    //setKebabMenuIndex(-1)
-    // if(recentSearchesDiv.current && !recentSearchesDiv.current.contains(e.target)){
-    //   setKebabMenuIndex(-1)
-    // }
-  }
 
   function outsideClick(){
     setKebabMenuIndex(-1);
@@ -162,7 +119,6 @@ function handleBGClick(){
   }
 
   function removeItemFromRecent(lat, long){
-    setRemovedRecent({lati: lat, long: long});
     let newhistory = history.filter(histo => histo.lat != lat && histo.lon != long)
     console.log(history)
     setHistory(newhistory);
@@ -199,18 +155,6 @@ function handleBGClick(){
   React.useEffect(() => {
       localStorage.setItem('data', JSON.stringify(history))
   }, [history])
-
-
-  // React.useEffect(() => {
-  //   setInterval(() => {
-  //     const time = new Intl.DateTimeFormat("en-US", {
-  //       timeZone: timezone,
-  //       timeStyle: "short", // gives hh:mm:ss
-  //       dateStyle: "medium"    // optional, gives full date
-  //     }).format();
-  //     setTime(time);
-  //   }, 30000)
-  // }, [timezone])
 
 
     React.useEffect(() => {
@@ -258,22 +202,8 @@ function handleBGClick(){
       
     }, [time])
 
-    // React.useEffect(() => {
-    //   setInterval(() => {
-    //     setTime(prev => prev)
-    //   }, [30000])
-    // }, )
-    //Refetches updated forecast every 30 seconds
-  // React.useEffect(() => {
-  //     setInterval(() => {
-  //       refetchForecast();
-  //     }, 30000);
-  // }, [])
-
   //When user clicks on another day
   React.useEffect(() => {
-    //console.log(currentIndexDivRef.current)
-    //console.log(index);
     if(currentIndexDivRef.current){
       currentIndexDivRef.current.scrollLeft = 
       currentIndexDivRef.current.scrollWidth - currentIndexDivRef.current.offsetWidth; //default scrollleft is to the max
@@ -317,7 +247,7 @@ function handleBGClick(){
       hourlyForecastContainer.current.style.borderTopRightRadius = '0px';
     }
    }
-  }, [index])
+  }, [index, width])
 
   function funcSetTime(name){
     setTime
@@ -343,7 +273,6 @@ function handleBGClick(){
       const data = await request.json();
       setWeatherForecast(data);
       setFetchSuccess(true);
-      //setSearchSuggestions([]);
     }catch(err){
        setFetchSuccess(false);
       console.log(err);
@@ -356,8 +285,6 @@ function handleBGClick(){
   //FUNCTIONS
 
   function chooseFromRecentSearch(lat, long, timezoneId){
-    console.log('AAAAAAAAAAAAAAAA')
-    console.log(timezoneId)
     chooseLocation(lat,long, timezoneId);
     setKebabMenuIndex(-1);
     setSearchHistoryShow(false);
@@ -508,7 +435,6 @@ function handleBGClick(){
                   recentSearchesNavBtnsRef={recentSearchesNavBtnsRef}
                   leftBtnRef={leftBtnRef}
                   rightBtnRef={rightBtnRef}
-                  removedRecent={removedRecent}
                   buttonClick={buttonClick}
                   weatherForecast={weatherForecast}/>
         <section id='body-section'>

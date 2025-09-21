@@ -8,7 +8,7 @@ export default function FiveDaysForecast(props){
     return(
        <>
        {
-        width > 650 ? <DesktopFiveDayForecast props={props}/> :  <MobileFiveDayForecast props={props} />
+        width > 680 ? <DesktopFiveDayForecast props={props}/> :  <MobileFiveDayForecast props={props} />
        }
        
        </>

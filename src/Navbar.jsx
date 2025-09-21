@@ -41,7 +41,8 @@ console.log(weatherForecast)
                             {region}
                         </div>
                         <div>
-                            {isCelsius ? <p>{histo.temp_c}</p> : <p>{histo.temp_f}</p>}
+                            {/* temperature decides if it is celsius or farenheit */}
+                            {isCelsius ? <p>{histo.temp_c}</p> : <p>{histo.temp_f}</p>} 
                             <img src={histo.icon}></img>
                         </div>
                     </button>
@@ -60,7 +61,7 @@ console.log(weatherForecast)
                             onClick={() => props.removeItemFromRecent(lat, lon)}
                             style={{
                         //top: '60px',
-                        left: props.kebabCoordinates.x - 5
+                        left: props.kebabCoordinates.x - 5 //makes the remove item appear at the bottom
                     }}
                     >Remove item</button>
                 </div>,
@@ -111,7 +112,7 @@ console.log(weatherForecast)
                   celsiusBtnClick={search.celsiusBtnClick}
                   farenheitBtnClick={search.farenheitBtnClick}
                   isCelsius={search.isCelsius}/>
-                {width > 600 ? 
+                {width > 690 ? 
                     <div id="recent-searches-div">
                         <div id="recent-searches" ref={recentSearchesDiv}>
                             {histoButtons}

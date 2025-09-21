@@ -220,9 +220,9 @@ function SkeletonCards(){
 
     return(
         <section id="main-forecast-skeleton">
-            <div id="skel-date-location-div">
-                <p id="skel-location-text"></p>
-                <p id="skel-date-text"></p>
+            <div id="skel-date-location-div" className="skel">
+                <p id="skel-location-text" className="skel"></p>
+                <p id="skel-date-text" className="skel"></p>
             </div>
             <div id="skel-current-weather" style={{display: 'flex'}}>
                 {/* <img src="/icons/Sunny-icon.png"></img> */}
@@ -237,27 +237,27 @@ function SkeletonCards(){
             <div id="skel-forecast-details">
                 <div className="skel-forecast-details-div">
                     <p className="skel-detail-name">Humidity</p>
-                    <p className="skel-detail-value"></p>
+                    <p className="skel-detail-value skel"></p>
                 </div>
                 <div className="skel-forecast-details-div">
                     <p className="skel-detail-name">Wind</p>
-                    <p className="skel-detail-value"></p>
+                    <p className="skel-detail-value skel"></p>
                 </div>
                 <div className="skel-forecast-details-div">
                     <p className="skel-detail-name">Visibility</p>
-                    <p className="skel-detail-value"></p>
+                    <p className="skel-detail-value skel"></p>
                 </div>
                 <div className="skel-forecast-details-div">
                     <p className="skel-detail-name">Pressure</p>
-                    <p className="skel-detail-value"></p>
+                    <p className="skel-detail-value skel"></p>
                 </div>
                 <div className="skel-forecast-details-div">
                     <p className="skel-detail-name">Dew point</p>
-                    <p className="skel-detail-value"></p>
+                    <p className="skel-detail-value skel"></p>
                 </div>
                 <div className="skel-forecast-details-div">
                     <p className="skel-detail-name">UV Index</p>
-                    <p className="skel-detail-value"></p>
+                    <p className="skel-detail-value skel"></p>
                 </div>
             </div>
         </section>
